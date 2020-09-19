@@ -44,65 +44,68 @@ void putDisk(Pole* p, int dSize)
     p->disks[p->count++] = dSize;
 }
 
-void makeValidMovement(Pole* s1, Pole* s2, int name1, int name2)
+void makeValidMovement(Pole* s1, Pole* s2, char name1, char name2)
 {
     if (s1->count == 0 && s2->count == 0)
         return;
     
     if (s1->count == 0 || getTop(s1) > getTop(s2))
     {
-        putDisk(s1, removeTop(s2));
-        printf("%d %d\n", name2, name1);
+        int disk = removeTop(s2);
+        putDisk(s1, disk);
+        printf("원판 %d(을)를 %c에서 %c로(으로) 옮깁니다.\n", disk, name2, name1);
     }
     else
     {
-        putDisk(s2, removeTop(s1));
-        printf("%d %d\n", name1, name2);
+        int disk = removeTop(s1);
+        putDisk(s2, disk);
+        printf("원판 %d(을)를 %c에서 %c로(으로) 옮깁니다.\n", disk, name1, name2);
     }
 }
 
-void swapValue(int* v1, int* v2)
+void swapValue(char* v1, char* v2)
 {
-    int temp = *v1;
+    char temp = *v1;
     *v1 = *v2;
     *v2 = temp;
 }
 
-void printHanoi(int n, int start, int free, int dest)
+void printHanoi(int n, char start, char free, char dest)
 {
-    int count = (1 << n) - 1;
-    Pole* startPole = createPole(n);
-    Pole* freePole = createPole(n);
-    Pole* destPole = createPole(n);
-
-    printf("%d\n", count);
+    Pole* aPole = createPole(n);
+    Pole* bPole = createPole(n);
+    Pole* cPole = createPole(n);
+    Pole* destPole = cPole;
 
     if (n % 2 == 0)
+    {
         swapValue(&free, &dest);
+        destPole = bPole;
+    }
     
     for (int s = n; s > 0; --s)
-        putDisk(startPole, s);
+        putDisk(aPole, s);
 
-    for (int i = 1; i <= count; ++i)
+    for (int i = 1; destPole->count < n; ++i)
     {
         if (i % 3 == 1)
-            makeValidMovement(startPole, destPole, start, dest);
+            makeValidMovement(aPole, cPole, start, dest);
         if (i % 3 == 2)
-            makeValidMovement(startPole, freePole, start, free);
+            makeValidMovement(aPole, bPole, start, free);
         if (i % 3 == 0)
-            makeValidMovement(freePole, destPole, free, dest);
+            makeValidMovement(bPole, cPole, free, dest);
     }
 
-    destroyPole(startPole);
-    destroyPole(freePole);
-    destroyPole(destPole);
+    destroyPole(aPole);
+    destroyPole(bPole);
+    destroyPole(cPole);
 }
 
 int main()
 {
     int k;
     scanf("%d", &k);
-    printHanoi(k, 1, 2, 3);
+    printHanoi(k, 'A', 'B', 'C');
 
     return 0;
 }
