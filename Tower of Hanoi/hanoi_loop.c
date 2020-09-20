@@ -72,33 +72,41 @@ void swapValue(char* v1, char* v2)
 
 void printHanoi(int n, char start, char free, char dest)
 {
-    Pole* aPole = createPole(n);
-    Pole* bPole = createPole(n);
-    Pole* cPole = createPole(n);
-    Pole* destPole = cPole;
+    Pole* startPole = createPole(n);
+    Pole* freePole = createPole(n);
+    Pole* destPole = createPole(n);
 
-    if (n % 2 == 0)
-    {
-        swapValue(&free, &dest);
-        destPole = bPole;
-    }
-    
     for (int s = n; s > 0; --s)
-        putDisk(aPole, s);
+        putDisk(startPole, s);
 
-    for (int i = 1; destPole->count < n; ++i)
+    if (n % 2)
     {
-        if (i % 3 == 1)
-            makeValidMovement(aPole, cPole, start, dest);
-        if (i % 3 == 2)
-            makeValidMovement(aPole, bPole, start, free);
-        if (i % 3 == 0)
-            makeValidMovement(bPole, cPole, free, dest);
+        for (int i = 0; destPole->count < n; ++i)
+        {
+            if (i % 3 == 0)
+                makeValidMovement(startPole, destPole, start, dest);
+            if (i % 3 == 1)
+                makeValidMovement(startPole, freePole, start, free);
+            if (i % 3 == 2)
+                makeValidMovement(freePole, destPole, free, dest);
+        }
+    }
+    else
+    {
+        for (int i = 0; destPole->count < n; ++i)
+        {
+            if (i % 3 == 0)
+                makeValidMovement(startPole, freePole, start, free);
+            if (i % 3 == 1)
+                makeValidMovement(startPole, destPole, start, dest);
+            if (i % 3 == 2)
+                makeValidMovement(freePole, destPole, free, dest);
+        }
     }
 
-    destroyPole(aPole);
-    destroyPole(bPole);
-    destroyPole(cPole);
+    destroyPole(startPole);
+    destroyPole(freePole);
+    destroyPole(destPole);
 }
 
 int main()
