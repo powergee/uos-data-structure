@@ -63,13 +63,6 @@ void makeValidMovement(Pole* s1, Pole* s2, char name1, char name2)
     }
 }
 
-void swapValue(char* v1, char* v2)
-{
-    char temp = *v1;
-    *v1 = *v2;
-    *v2 = temp;
-}
-
 void printHanoi(int n, char start, char free, char dest)
 {
     Pole* startPole = createPole(n);
