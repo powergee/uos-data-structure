@@ -103,10 +103,9 @@ int main(int argc, char* argv[])
 
 	start = clock();
 
-    while (!feof(fp))
+    while (fscanf(fp, "%lu", &blkno) == 1)
     {
         ++total_count;
-        fscanf(fp, "%lu", &blkno);
         found = search(&lrulist, blkno);
 
         // 캐시에서 히트되지 않았을 경우
